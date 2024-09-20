@@ -1,5 +1,4 @@
-// g++-std=c++11-O2-Wall test.cpp-o test
-
+#include <bits/stdc++.h> 
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -19,9 +18,6 @@ typedef long double ld;
 
 using namespace std; 
 
-// ios::sync_with_stdio(0); 
-// cin.tie(0);
-
 
 void solve() {
 
@@ -30,9 +26,11 @@ void solve() {
 
 
 int main() { 
+    ios::sync_with_stdio(0); 
+    cin.tie(0);
+
     int t;
     cin >> t;
-
     while (t--) {
         solve();
     }
