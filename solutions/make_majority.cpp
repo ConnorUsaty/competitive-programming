@@ -4,32 +4,32 @@
 
 using namespace std; 
 
-ios::sync_with_stdio(0); 
-cin.tie(0);
-
 
 void solve() {
-    int n;
-    cin >> n;
-    int p;
-    cin >> p;
-    --n;
-    int count = (p==0)?-1:0;
-    // count groups of 0s vs individual ones
-    while (n--) {
-        int x;
-        cin >> x;
-        if(x==1){
-            count++;
-        }
-        else if (x != p) {
-            // new group of zeros found
-            count--;
-        }
-        p = x;
+    int n, count;
+    string s;
+    cin >> n; // length of string
+    cin >> s; // string EX: 10001
+    char p = s[0]; // prev char
+
+    if (p=='0') {
+        count = -1;
+    } else {
+        count = 1;
     }
 
-    return ((count>0)?"Yes\n":"No\n")
+    // count groups of 0s vs individual ones
+    for (int i = 1; i < n; ++i) {
+        if(s[i]=='1'){
+            count++;
+        }
+        else if (s[i] != p) {
+            count--;  // new group of zeros found
+        }
+        p = s[i];
+    }
+
+    cout << ((count>0)?"Yes\n":"No\n");
 }
 
 
@@ -38,11 +38,13 @@ int main() {
     cin >> t;
 
     while (t--) {
-        cout << solve();
+        solve();
     }
 
     return 0;
 }
 
 // 900 Rating
-// No way to submit ??
+// Accepted
+// Be careful with datatypes i.e. checking if i == 1 vs i == '1'
+// be careful with input and output specifications i.e. \n or ' ' between output and whether each digit is to be read in seperately or as one big string
