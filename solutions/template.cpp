@@ -13,6 +13,8 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <stack>
+
 typedef long long ll;
 typedef long double ld;
 
