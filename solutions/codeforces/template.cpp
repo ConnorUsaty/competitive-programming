@@ -17,7 +17,7 @@
 
 typedef long long ll;
 typedef long double ld;
-typedef pair<int,int> pii;
+// typedef pair<int,int> pii;
 
 using namespace std; 
 
