@@ -19,44 +19,42 @@ typedef long long ll;
 typedef long double ld;
 // typedef pair<int,int> pii;
 
-using namespace std; 
+using namespace std;
 
 
 void solve() {
-    int n, k;
+    ll n, k;
     cin >> n >> k;
 
     // min of k
     // max of k+n-1
-    vector<int> a(n); // from k+ 0 to k+ n-1 psum array
-    a[0] = k;
-    for (int i = 1; i < n; ++i) {
-        a[i] = k+i;
-        a[i] += a[i-1];
-    }
-    // want to MINIMIZE absolute value of sorted list
+    // n total elements
 
-    int l = 0;
-    int r = n-1;
-    ll ans = 1ll*a[n-1];
+    ll l = 1ll* 1;
+    ll r = 1ll* n;
 
     while (l <= r) {
-        int m = (r+l)/2;
-        ans = min(ans, 1ll*abs(a[m]-a[r]));
+        ll m = 1ll* (r+l)/2;
+        ll a = 1ll* (m/2) * (k + (k+m-1));
+        ll b = 1ll* (n/2) * (k + (k+n-1)) - a;
 
-        if (a[m] - a[r] < 0) {
+        if (a-b < 0) {
             l = m+1;
         }
-        else if (a[m] - a[r] > 0) {
-            r = m-1;
-        }
         else {
-            ans = 0;
-            break;
+            r = m-1;
         }
     }
 
-    cout << ans << "\n";
+    ll m = 1ll* (r+l)/2;
+    ll a1 = 1ll* (m/2) * (k + (k+m-1));
+    ll b1 = 1ll* (n/2) * (k + (k+n-1)) - a1;
+
+    m++;
+    ll a2 = 1ll* (m/2) * (k + (k+m-1));
+    ll b2 = 1ll* (n/2) * (k + (k+n-1)) - a2;
+
+    cout << min((b1-a1), (a2-b2)) << "\n";
     return;
 }
 
@@ -76,3 +74,8 @@ int main() {
 
 
 // Make sure same datatype is used in comparisons, i.e. min(int,int) or max(ll,ll)
+
+// Notice that since array is sorted we can utilize binary search on the sums to find the minimum
+// Massive array of n size, where n is unbounded. Therefore we got memory exceeded if we try to precompute prefix sums and use them for binary search
+// Need to only calculate necessary sums when they're needed, i.e. the 2 sums we are comparing each time while we binary search
+// We can do this with the sum of arithmetic sequence formula -> (n/2) * (a1 + an), where a1 is the first term of the sequence and an is the last
