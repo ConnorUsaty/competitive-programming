@@ -4,7 +4,7 @@ public:
         int l=0, r=nums.size()-1;
 
         while(l<=r){
-            int m = (r+l)/2;
+            int m = l+ (r-l)/2;
 
             if(nums[m]<target){
                 l=m+1;
@@ -19,4 +19,5 @@ public:
 };
 
 // use while (l<=r) for binary search, use r for else to push r over l, then return l
+// use int m = l + (r-l)/2; to prevent overflow of (r+l)
 // use while (l<r) for two ptrs
