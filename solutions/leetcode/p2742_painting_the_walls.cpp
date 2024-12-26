@@ -1,17 +1,23 @@
 class Solution {
 public:
     int paintWalls(vector<int>& cost, vector<int>& time) {
+        // dp[i][j] i = subset of first i walls, j = walls completed
+        // i belongs to [0, cost.size()]
+        // j belongs to [0, cost.size()]
+        // dp[i][j] stores min cost to complete j walls with subset of first i walls
+        // at each [i][j] take best solution out of [i-1][j-cost] and [i][j-1]
+
         int n = cost.size();
-        long long inf = 1e9;
-        vector<vector<int>> dp(n+1, vector<int>(n+1, inf));
+        vector<vector<int>> dp(n+1, vector<int>(n+1, 1e9));
 
-        for(int i=0;i<n+1;++i) dp[i][0] = 0;
+        // initialize base case of 0 walls complete
+        for(int i=0;i<n;++i) dp[i][0] = 0; // 0 cost to complete 0 walls
 
-        for(int i=1;i<n+1;++i){
-            for(int j=1;j<n+1;++j){
-                int not_take = dp[i-1][j];
-                int take = dp[i-1][max(j-time[i-1]-1, 0)] + cost[i-1];
-                dp[i][j] = min(take, not_take);
+        for(int i=1;i<=n;++i){
+            for(int j=1;j<=n;++j){
+                int not_take = dp[i-1][j]; // cost of prev subset solution 
+                int take = dp[i-1][max(j-time[i-1]-1, 0)] + cost[i-1]; // cost of taking item
+                dp[i][j] = min(not_take, take); // take min cost
             }
         }
 
@@ -19,6 +25,7 @@ public:
     }
 };
 
-// Have to max sure to stay within index bounds of all arrays
-// This means accessing cost and time through i-1
-// As well as taking the max of zero and the time earned
+// dp
+// come up with subsets to build up from / bounds for dp arr
+// initialize base cases
+// iterate through and build up from base cases to final solution
