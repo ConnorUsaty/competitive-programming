@@ -1,25 +1,23 @@
 class Solution {
-public:
-    vector<vector<int>> subsets(vector<int>& nums) {
-        vector<vector<int>> ans;
-        vector<int> subset;
-
-        dfs(0, nums, subset, ans);
-        return ans;
-    }
-
 private:
-    void dfs(int i, const vector<int>& nums, vector<int>& subset, vector<vector<int>>& ans) {
-        if (i >= (int)nums.size()) {
-            // base case
-            ans.push_back(subset);
+    void backtrack(vector<vector<int>>& ans, vector<int>& nums, vector<int>& curr, int i){
+        if (i==nums.size()){
+            ans.push_back(curr);
             return;
         }
 
-        subset.push_back(nums[i]);
-        dfs(i+1, nums, subset, ans); // dfs with curr element
-        subset.pop_back();
-        dfs(i+1, nums, subset, ans); // dfs without curr element
+        curr.push_back(nums[i]);
+        backtrack(ans, nums, curr, i+1);
+        curr.pop_back();
+        backtrack(ans, nums, curr, i+1);
+    }
+    
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> ans;
+        vector<int> curr;
+        backtrack(ans, nums, curr, 0);
+        return ans;
     }
 };
 
