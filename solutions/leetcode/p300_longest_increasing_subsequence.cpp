@@ -1,3 +1,32 @@
+// GREEDY SOLUTION O(nlogn) time
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        vector<int> sub = {nums[0]};
+        for(int i=1; i<nums.size(); ++i){
+            if(sub.back()<nums[i]){
+                sub.push_back(nums[i]);
+            }
+
+            int l=0, r=sub.size()-1;
+            while(l<=r){
+                int m = l+(r-l)/2;
+
+                if(sub[m]<nums[i]){
+                    l=m+1;
+                } else {
+                    r=m-1;
+                }
+            }
+            sub[l] = nums[i];
+        }
+
+        return (int)sub.size();
+    }
+};
+
+
+// DP SOLUTION O(n^2) time
 class Solution {
 public:
     int lengthOfLIS(vector<int>& nums) {
