@@ -9,4 +9,9 @@ public:
     }
 };
 
+// THIS SOLUTION ONLY WORKS ON INT ONLY COORDINATES
+// IF DOUBLES OR FLOATS ACCEPTED WE HAVE TO CHECK THAT THE COUNTS OF ONE DISTANCE = 4 AND THE COUNT OF THE OTHER = 2
+
 // cannot just check that diagonal lengths match, we also have to check that the 4 side lengths match
+
+// checking for diag then for other points existence doesnt work due to squares that are diagonal and not "upright"
