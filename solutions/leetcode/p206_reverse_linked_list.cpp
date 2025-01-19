@@ -11,13 +11,18 @@
 class Solution {
 public:
     ListNode* reverseList(ListNode* head) {
-        ListNode *temp, *prev = NULL;
+        ListNode* prev = nullptr;
+        ListNode* next = nullptr;
         while(head){
-            temp = head->next;
+            next = head->next;
             head->next = prev;
             prev = head;
-            head = temp;
+            head = next;
         }
         return prev;
     }
 };
+
+// have to have ptrs to prev and next to perform swaps
+// swaps go in order, i.e. next set to head->next, then head->next set to next, then prev set to head, then head set to next
+// need to return prev instead of head because head will be null
