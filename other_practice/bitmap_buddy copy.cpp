@@ -33,6 +33,12 @@ private:
         // If it only has a left child and left is set should it be set ??
         // if above have to do 3 if statment instead of tenary operator
 
+        // edge case of only having a left child
+        if(2*i+1<_bmb.size() && _bmb[2*i+1] && 2*i+2>=_bmb.size()) {
+            _bmb[i] = 1;
+            i = (i-1) / 2;
+        }
+
         while(!_bmb[i]) {
             int left_child = (2*i+1 < _bmb.size()) ? _bmb[2*i+1] : 0;
             int right_child = (2*i+2 < _bmb.size()) ? _bmb[2*i+2] : 0;
