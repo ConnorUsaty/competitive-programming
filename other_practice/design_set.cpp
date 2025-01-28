@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
+#include <valarray>
 
 template <typename T>
 class Set {
@@ -65,6 +66,7 @@ template <typename T>
 class HashSet {
 private:
     std::vector<T> _v;
+    std::vector<int> _i;
     int _capacity;
     int _size;
 
@@ -77,7 +79,9 @@ private:
         _capacity *= 2;
         std::vector<T> old_v = _v;
         _v.clear();
-        _v.resize(_capacity, -2);
+        _v.resize(_capacity);
+        _i.clear();
+        _i.resize(_capacity, -2);
 
         for(int i=0; i<old_capacity; ++i){
             insert(old_v[i]);
@@ -85,7 +89,7 @@ private:
     }
 
 public:
-    HashSet() : _v(10, -2), _capacity(10), _size(0) {};
+    HashSet() : _v(10), _i(10, -2), _capacity(10), _size(0) {};
 
     void insert(T t) {
         if(_size == _capacity){
@@ -93,10 +97,11 @@ public:
         }
         int h = hash(t);
         int i = 0;
-        while(_v[h]!=-2 && _v[h]!=t){
+        while(_i[h]!=-2 && _v[h]!=t){
             h = (h+1) % _capacity;
         }
-        if(_v[h]!=t){
+        if(_i[h]<0){
+            _i[h] = h;
             _v[h] = t;
             _size++;
         }
@@ -105,7 +110,7 @@ public:
     void remove(T t){
         int h = hash(t);
         int i = 0;
-        while(_v[h]!=-2 && _v[h]!=t && i<_capacity){
+        while(_i[h]!=-2 && _v[h]!=t && i<_capacity){
             h = (h+1) % _capacity;
             i++;
         }
@@ -139,8 +144,69 @@ public:
     }
 };
 
+
+typedef long long ll;
+
+class SparseSet {
+private:
+    ll _capacity;
+    ll _size;
+    ll _timestamp;
+    std::vector<int> _idx;
+    std::vector<int> _values;
+    std::vector<int> _timestamps;
+
+public:
+    SparseSet(int c) : _capacity(c), _size(0), _timestamp(1), _idx(c), _values(c), _timestamps(c) {} ;
+
+    void insert(int item) {
+        if(item<0 || item>=_capacity) return;
+
+        if(_timestamp != _timestamps[item]){
+            _idx[item] = _size;
+            _values[_size] = item;
+            _timestamps[item] = _timestamp;
+            _size++;
+        }
+    }
+
+    void remove(int item) {
+        if(item<0 || item>=_capacity) return;
+
+        if(_timestamp == _timestamps[item]) {
+            std::swap(_values[_size-1], _values[_idx[item]]);
+            _timestamps[item] = 0;
+            _size--;
+        }
+    }
+
+    bool lookup(int item) {
+        return _timestamp == _timestamps[item];
+    }
+
+    void clear() {
+        _size = 0;
+        _timestamp++;
+    }
+
+    std::vector<int> iterate() {
+        return std::vector<int>(_values.begin(), _values.begin()+_size);
+    }
+
+    void printSet() {
+        std::vector<int> curr_vals = iterate();
+        if(curr_vals.size()==0){
+            std::cout << "EMPTY\n";
+            return;
+        }
+        for(auto v : curr_vals) std::cout << v << ' ';
+        std::cout << "\n";
+    }
+};
+
+
 int main() {
-    HashSet<int> s;
+    SparseSet s(20);
     s.printSet();
 
     s.insert(1);
@@ -151,8 +217,8 @@ int main() {
     s.printSet();
 
     s.insert(4);
-    s.insert(85);
-    s.insert(85);
+    s.insert(19);
+    s.insert(1);
     s.insert(85);
     s.printSet();
 
@@ -160,10 +226,20 @@ int main() {
     // std::cout << s.returnRandElement() << "\n";
     // std::cout << s.returnRandElement() << "\n";
 
-    std::cout << s.search(4) << "\n";
+    std::cout << s.lookup(4) << "\n";
     s.remove(4);
     s.printSet();
-    std::cout << s.search(4) << "\n";
+    std::cout << s.lookup(4) << "\n";
+
+    s.insert(4);
+    s.insert(19);
+    s.insert(1);
+    s.insert(5);
+    s.insert(8);
+
+    s.printSet();
+    s.clear();
+    s.printSet();
 
     return 0;
 }
