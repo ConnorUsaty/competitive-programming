@@ -66,7 +66,7 @@ public:
 };
 
 
-void test(const std::vector<std::string> operations, const std::vector<int> values, const std::vector<std::vector<int>> exp_vals) {
+void test(const std::vector<std::string>& operations, const std::vector<int>& values, const std::vector<std::vector<int>>& exp_vals) {
 
     int test_cases = (int)operations.size();
     int passes = 0;
@@ -107,7 +107,7 @@ void test(const std::vector<std::string> operations, const std::vector<int> valu
 int main() {
     std::vector<std::string> operations = {"insert","insert","insert","remove","insert","clear","search","insert","search"};
     std::vector<int> values = {1,2,1,1,3,-1,5,5,5};
-    std::vector<std::vector<int>> exp_vals = {{1},{1,2},{1,2},{2},{2,3},{},{0},{5},{0}};
+    std::vector<std::vector<int>> exp_vals = {{1},{1,2},{1,2},{2},{2,3},{},{0},{5},{1}};
 
     test(operations, values, exp_vals);
 
