@@ -65,68 +65,51 @@ public:
     }
 };
 
+
+void test(const std::vector<std::string> operations, const std::vector<int> values, const std::vector<std::vector<int>> exp_vals) {
+
+    int test_cases = (int)operations.size();
+    int passes = 0;
+
+    SparseSet test_set(25);
+
+    for(int i=0; i<test_cases; ++i){
+        std::string op = operations[i];
+        int val = values[i];
+        std::vector<int> exp = exp_vals[i];
+
+        if(op == "insert"){
+            test_set.insert(val);
+            if(test_set.iterate() == exp) passes++;
+            else std::cout << "Test " << i << " failed." << "\n";
+        }
+        else if (op == "remove"){
+            test_set.remove(val);
+            if(test_set.iterate() == exp) passes++;
+            else std::cout << "Test " << i << " failed." << "\n";
+        }
+        else if (op == "clear"){
+            test_set.clear();
+            if(test_set.iterate() == exp) passes++;
+            else std::cout << "Test " << i << " failed." << "\n";
+        }
+        else if (op == "search"){
+            bool res = test_set.search(val);
+            if(res == exp[0]) passes++;
+            else std::cout << "Test " << i << " failed." << "\n";
+        }
+    }
+    std::cout << "Passed " << passes << "/" << test_cases << " test cases.\n";
+}
+
+
+
 int main() {
-    SparseSet s(14);
-    s.printVals();
+    std::vector<std::string> operations = {"insert","insert","insert","remove","insert","clear","search","insert","search"};
+    std::vector<int> values = {1,2,1,1,3,-1,5,5,5};
+    std::vector<std::vector<int>> exp_vals = {{1},{1,2},{1,2},{2},{2,3},{},{0},{5},{0}};
 
-    s.insert(1);
-    s.insert(1);
-    s.insert(4);
-    s.insert(11);
-    s.insert(12);
-    s.insert(1);
-    s.insert(13);
-    s.insert(15);
-
-    s.printVals();
-
-    s.remove(31);
-    s.remove(13);
-    s.remove(1);
-    s.remove(4);
-    s.remove(1);
-
-    s.printVals();
-
-    s.clear();
-
-    s.printVals();
-
-    s.insert(1);
-    s.insert(1);
-    s.insert(4);
-    s.insert(11);
-    s.insert(12);
-    s.insert(1);
-    s.insert(13);
-    s.insert(15);
-
-    s.printVals();
-
-    s.remove(31);
-    s.remove(13);
-    s.remove(1);
-    s.remove(4);
-    s.remove(1);
-
-    s.printVals();
-
-    std::cout << "Searching for 1: " << s.search(1) << "\n";
-    std::cout << "Searching for 1: " << s.search(1) << "\n";
-    std::cout << "Searching for 11: " << s.search(11) << "\n";
-    std::cout << "Searching for 12: " << s.search(12) << "\n";
-    std::cout << "Searching for 14: " << s.search(14) << "\n";
-    std::cout << "Searching for 14: " << s.search(14) << "\n";
-
-    s.insert(14);
-    s.insert(0);
-    s.insert(14);
-
-    std::cout << "Searching for 14: " << s.search(14) << "\n";
-    std::cout << "Searching for 0: " << s.search(0) << "\n";
-
-    s.printVals();
-
+    test(operations, values, exp_vals);
 
     return 0;
 }
