@@ -62,16 +62,25 @@ When doing remove, or search we have to also make sure that i<_capacity so that 
 When doing remove or insert we have to check if the element is removed or inserted to properly track the size variable
 Test cases should have at least one for each function possibility, i.e. insert normal, insert duplicate, insert req resize, insert duplicate req resize
 */
+
 template <typename T>
+struct DefaultHash {
+    int operator()(T t, int capacity) const {
+        return std::hash<T>{}(t) % capacity;
+    }
+};
+
+template <typename T, typename HashFunc = DefaultHash<T>>
 class HashSet {
 private:
     std::vector<T> _v;
     std::vector<int> _i;
     int _capacity;
     int _size;
+    HashFunc _hashFunc;
 
     int hash(T t) {
-        return std::hash<T>{}(t) % _capacity;
+        return _hashFunc(t, _capacity);
     }
 
     void resize() {
@@ -125,6 +134,7 @@ public:
         int i = 0;
         while(_v[h]!=-2 && _v[h]!=t && i<_capacity){
             h = (h+1) % _capacity;
+            i++;
         }
         return (_v[h] == t);
     }
@@ -206,6 +216,20 @@ public:
 
 
 int main() {
+    HashSet<int> hs;
+    hs.insert(1);
+    hs.insert(1);
+    hs.insert(1);
+    hs.insert(1);
+    hs.printSet();
+    hs.remove(1);
+    hs.search(1);
+    hs.insert(1);
+    hs.insert(12);
+    hs.insert(10);
+    hs.insert(11);
+    hs.printSet();
+
     SparseSet s(20);
     s.printSet();
 
