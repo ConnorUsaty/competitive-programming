@@ -1,23 +1,7 @@
-// #include <bits/stdc++.h> 
-#include <algorithm>
-#include <bitset>
-#include <cassert>
-#include <chrono>
-#include <cmath>
-#include <deque>
-#include <iomanip>
-#include <iostream>
-#include <map>
-#include <queue>
-#include <random>
-#include <set>
-#include <string>
-#include <vector>
-#include <stack>
+#include <bits/stdc++.h> 
 
 typedef long long ll;
-typedef long double ld;
-// typedef pair<int,int> pii;
+typedef std::pair<int,int> pii;
 
 using namespace std; 
 
