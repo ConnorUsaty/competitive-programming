@@ -11,23 +11,21 @@
  */
 class Solution {
 private:
-    int ans=0;
+    void traverse(TreeNode* t, int& k, int& ans){
+        if(t == nullptr || ans != -1) return;
 
-    void traverse(TreeNode* t, int &k){
-        if(!t || !k) return;
-
-        if(t->left) traverse(t->left, k);
-        if(--k == 0){
-            ans = t->val;
-        }
-        if(t->right) traverse(t->right, k);
+        traverse(t->left, k, ans);
+        if(--k == 0) ans = t->val;
+        else traverse(t->right, k, ans);
     }
+    
 public:
     int kthSmallest(TreeNode* root, int k) {
-        traverse(root, k);
+        int ans = -1;
+        traverse(root, k, ans);
         return ans;
     }
 };
 
-
-// in order traversal of BST gives sorted order of all elements
+// inorder traversal of BST gives sorted order of elements
+// inorder traversal, increment count of nodes passed at parent step by decrementing k
