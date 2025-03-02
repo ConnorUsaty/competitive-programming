@@ -11,25 +11,21 @@
  */
 class Solution {
 private:
-    bool treeMatch(TreeNode* t, TreeNode* s){
-        if(!t && !s) return true;
-        if(!t || !s) return false;
-
-        if(t->val == s->val){
-            return (treeMatch(t->left, s->left) && treeMatch(t->right, s->right));
-        }
-        return false;
+    bool checkTree(TreeNode* t, TreeNode* s){
+        if(t==nullptr && s==nullptr) return true;
+        if(t==nullptr || s==nullptr || t->val!=s-> val) return false;
+        
+        return (checkTree(t->left,s->left) && checkTree(t->right,s->right));
     }
-
+    
 public:
     bool isSubtree(TreeNode* root, TreeNode* subRoot) {
-        if (treeMatch(root, subRoot)) return true;
-        if (!root) return false;
-        return (isSubtree(root->left, subRoot) || isSubtree(root->right, subRoot));
+        if(!root) return false;
+        if(root->val==subRoot->val && checkTree(root, subRoot)) return true;
+        
+        return (isSubtree(root->left, subRoot) || isSubtree(root->right, subRoot)); 
     }
 };
 
-
-// at each node of tree, check if that node contains the subtree
-// traverse down original tree while keeping subRoot at top of subtree
-// only move subRoot ptr down tree when performing a check and always keep the reference to original subRoot for check at next node
+// traverse down original tree checking trees at each potential match
+// do NOT traverse substree except for checking
