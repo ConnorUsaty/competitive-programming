@@ -1,40 +1,37 @@
 class Solution {
 public:
     string numberToWords(int num) {
-        if(num==0){
+        if(num == 0){
             return "Zero";
         }
 
+        string ans_str = "";
         int grp_idx = -1;
-        string ans = "";
-
         while(num > 0){
-            string grp_ans = "";
-            int curr = num % 1000;
+            string grp_str = "";
+            int grp = num % 1000;
             num /= 1000;
             grp_idx++;
-            if(curr==0) continue;
+            if(grp==0) continue;
 
-            if(curr >= 100){
-                grp_ans += ones[curr / 100] + " Hundred ";
-                curr %= 100;
+            if(grp >= 100){
+                grp_str += ones[grp/100] + " Hundred ";
+                grp %= 100;
             }
-            if(curr>=20){
-                grp_ans += tens[curr/10] + " ";
-                curr %= 10;
+            if(grp>=20){
+                grp_str += tens[grp/10] + " ";
+                grp %= 10;
             }
-            if(curr>0){
-                grp_ans += ones[curr] + " ";
+            if(grp>0){
+                grp_str += ones[grp] + " ";
             }
-            grp_ans += groups[grp_idx] + " ";
-            ans = grp_ans + ans;
+            grp_str += groups[grp_idx] + " ";
+            ans_str = grp_str + ans_str;
         }
-
-        while(ans.size()>=1 && ans[ans.size()-1]==' '){
-            ans.pop_back();
+        while(ans_str.size()>0 && ans_str[ans_str.size()-1]==' '){
+            ans_str.pop_back();
         }
-
-        return ans;
+        return ans_str;
     }
 
 private:
@@ -62,10 +59,14 @@ private:
     };
     const vector<string> tens = {"", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
     const vector<string> groups = {"", "Thousand", "Million", "Billion"};
-
 };
 
-// process in groups of three to append group labe, i.e. "Thousand"
-// Need unique mapping for 1 through 19
-// Can split ones and tens dig from 20 to 99
-// Remember to consider edge cases such as num or curr == 0
+// clarify inputs, outputs, constraints
+// walk through example
+// come up with and evaluate solutions -> involves actually listing out steps required / pseudo code
+// code solution
+// consider edge cases and refer to constraints
+// walk through example / test with solution
+// run / submit code
+
+// group name, hundreds name, 0-19 needs specific mapping, 20-99 can be decomposed into tens and ones digits
