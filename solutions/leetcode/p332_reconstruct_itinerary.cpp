@@ -5,24 +5,29 @@ public:
         for(const auto& t : tickets){
             adj[t[0]].push_back(t[1]);
         }
-        for(auto& [u, v_list] : adj){
-            sort(v_list.rbegin(), v_list.rend());
+        for(auto& [_, edges] : adj){
+            sort(edges.rbegin(), edges.rend());
         }
 
-        vector<string> ans;
+        vector<string> itinerary;
         string start = "JFK";
-        dfs(start, ans, adj);
-        reverse(ans.begin(), ans.end());
-        return ans;
+        dfs(start, adj, itinerary);
+        reverse(itinerary.begin(), itinerary.end());
+        return itinerary;
     }
 
 private:
-    void dfs(const string& curr, vector<string>& ans, unordered_map<string,vector<string>>& adj){
-        while(!adj[curr].empty()){
-            string v = adj[curr].back();
-            adj[curr].pop_back();
-            dfs(v, ans, adj);
+    void dfs(const string& airport, unordered_map<string,vector<string>>& adj, vector<string>& itinerary){
+        auto& edges = adj[airport];
+        while(!edges.empty()){
+            string v = edges.back();
+            edges.pop_back();
+            dfs(v, adj, itinerary);
         }
-        ans.push_back(curr);
+        itinerary.push_back(airport);
     }
 };
+
+// euler path -> visit all edges ONCE and star != finish
+// have to reverse path
+// access and pop_back() for O(1) operations
