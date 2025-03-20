@@ -1,35 +1,34 @@
-class TrieNode {
+class TrieNode{
 private:
     TrieNode* next[26];
     bool is_end;
 
 public:
-
-    TrieNode() {
-        for (int i = 0; i < 26; ++i) {
+    TrieNode(){
+        for(int i=0; i<26; ++i){
             next[i] = nullptr;
         }
         is_end = false;
-    }
-
-    bool containsKey(char c) {
-        return next[c-'a'] != nullptr;
     }
 
     TrieNode* get(char c){
         return next[c-'a'];
     }
 
-    void put(TrieNode* t, char c){
-        next[c-'a'] = t;
+    void put(char c){
+        next[c-'a'] = new TrieNode();
     }
 
-    void setEnd() {
-        is_end = true;
+    bool containsKey(char c){
+        return (next[c-'a'] != nullptr);
     }
 
-    bool isEnd() {
+    bool isEnd(){
         return is_end;
+    }
+
+    void setEnd(){
+        is_end = true;
     }
 };
 
@@ -38,48 +37,52 @@ class Trie {
 private:
     TrieNode* root;
 
+    TrieNode* searchPrefix(const string& prefix){
+        TrieNode* p = root;
+        for(const char& c : prefix){
+            if(p->containsKey(c)){
+                p = p->get(c);
+            } else {
+                return nullptr;
+            }
+        }
+        return p;
+    }
+
 public:
     Trie() {
         root = new TrieNode();
     }
     
-    // O(m) time, m = length of word, O(m) space, worst case all char in word require new node
     void insert(string word) {
-        TrieNode* t = root;
+        TrieNode* p = root;
         for(const char& c : word){
-            if(!t->containsKey(c)){
-                TrieNode* new_node = new TrieNode();
-                t->put(new_node, c);
+            if(!p->containsKey(c)){
+                p->put(c);
             }
-            t = t->get(c);
+            p = p->get(c);
         }
-        t->setEnd();
+        p->setEnd();
     }
     
-    // O(m) time, O(1) space
     bool search(string word) {
-        TrieNode* t = root;
-        for(const char& c : word){
-            if(!t->containsKey(c)){
-                return false;
-            }
-            t = t->get(c);
-        }
-        return t->isEnd();
+        TrieNode* res = searchPrefix(word);
+        return (res!=nullptr && res->isEnd());
     }
     
-    // O(m) time, O(1) space
     bool startsWith(string prefix) {
-        TrieNode* t = root;
-        for(const char& c : prefix){
-            if(!t->containsKey(c)){
-                return false;
-            }
-            t = t->get(c);
-        }
-        return true;
+        TrieNode* res = searchPrefix(prefix);
+        return (res!=nullptr);
     }
 };
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie* obj = new Trie();
+ * obj->insert(word);
+ * bool param_2 = obj->search(word);
+ * bool param_3 = obj->startsWith(prefix);
+ */
 
 // TrieNode consists of TrieNode* next[26]; and bool is_end;
 // contains methods, containsKey(), put(), get(), isEnd(), setEnd()
