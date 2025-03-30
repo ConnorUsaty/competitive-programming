@@ -11,22 +11,20 @@
  */
 class Solution {
 private:
-    int ans;
-
-    int traverse(TreeNode* t){
+    int dfs(TreeNode* t, int& ans){
         if(t == nullptr) return 0;
 
-        int left = max(traverse(t->left), 0);
-        int right = max(traverse(t->right), 0);
+        int left = dfs(t->left, ans);
+        int right = dfs(t->right, ans);
+        
         ans = max(ans, left+right+t->val);
-
-        return max(left+t->val, right+t->val);
+        return max(0, max(left,right) + t->val);
     }
 
 public:
     int maxPathSum(TreeNode* root) {
-        ans = -1001;
-        traverse(root);
+        int ans = -1001;
+        dfs(root, ans);
         return ans;
     }
 };
