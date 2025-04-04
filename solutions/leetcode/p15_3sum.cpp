@@ -2,33 +2,30 @@ class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
         int n = (int)nums.size();
-        vector<vector<int>> ans;
-        sort(nums.begin(), nums.end()); // O(nlogn)
+        sort(nums.begin(), nums.end());
 
-        // O(n^2)
-        for(int i=0;i<n-2;++i){
-            if(nums[i]>0) break; // no more possible solutions
+        vector<vector<int>> ans;
+        for(int i=0; i<n-2; ++i){
+            if(nums[i]>0) break;
             int l=i+1, r=n-1;
             while(l<r){
-                int s = nums[i]+nums[l]+nums[r];
-                if(s>0){
+                int sm = nums[i]+nums[l]+nums[r];
+                if(sm>0){
                     r--;
-                } else if(s<0){
+                }
+                else if(sm<0){
                     l++;
                 }
                 else{
                     ans.push_back({nums[i],nums[l],nums[r]});
-                    // avoid duplicate answers
-                    while(l<n-1 && nums[l]==nums[l+1]) l++;
-                    while(r>0 && nums[r]==nums[r-1]) r--;
+                    while(l<r && nums[l]==nums[l+1]) l++;
+                    while(r>l && nums[r]==nums[r-1]) r--;
                     l++;
                     r--;
                 }
             }
-            // avoid duplicate answers
             while(i<n-3 && nums[i]==nums[i+1]) i++;
         }
-
         return ans;
     }
 };
