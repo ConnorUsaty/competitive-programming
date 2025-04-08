@@ -71,3 +71,6 @@ public:
 
 // when using vector<int> you can directly do cnt1 == cnt2, as they have built in comparators
 // when using int [], (normal static array), you CANNOT do cnt1 == cnt2, have to write own helper to check
+
+// when window if of fixed size just build up window with first separate loop, then slide across in secondary loop
+// can be optimized by keeping track of num of differences in cnts rather than comparing all 26 cnts each times
