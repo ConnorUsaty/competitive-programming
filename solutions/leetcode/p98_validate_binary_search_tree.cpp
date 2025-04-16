@@ -9,28 +9,31 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
+typedef long long ll;
+
 class Solution {
 private:
-    void traverse(TreeNode* t, long long& last, bool& valid){
-        if(!t || !valid) return;
+    bool inorder(TreeNode* t, ll& mx){
+        if(t == nullptr) return true;
 
-        traverse(t->left, last, valid);
-        if(t->val <= last){
-            valid = false;
-        } else {
-            last = t->val;
-        }
-        traverse(t->right, last, valid);
+        if(!inorder(t->left, mx)) return false;
+        if(t->val <= mx) return false;
+        mx = t->val;
+        if(!inorder(t->right, mx)) return false;
+
+        return true;
     }
 
 public:
     bool isValidBST(TreeNode* root) {
-        long long last = LLONG_MIN;
-        bool valid = true;
-        traverse(root, last, valid);
-        return valid;
+        ll mx = LLONG_MIN;
+        return inorder(root, mx);
     }
 };
+ 
+ // inorder traversal should give us sorted order
+ // just perform an inorder traversal and check that each node > last node
 
 // O(n) time -> visiting all nodes, O(h) space -> recursive call stack
 
