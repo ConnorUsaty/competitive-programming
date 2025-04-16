@@ -1,29 +1,26 @@
 class Solution {
+private:
+    void backtrack(vector<vector<int>>& ans, vector<int>& curr, vector<int>& cand, int i, int target){
+        if(target == 0){
+            ans.push_back(curr);
+            return;
+        }
+
+        for(; i<(int)cand.size(); ++i){
+            if(target-cand[i]>=0){
+                curr.push_back(cand[i]);
+                backtrack(ans, curr, cand, i, target-cand[i]);
+                curr.pop_back();
+            }
+        }
+    }
+
 public:
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
         vector<vector<int>> ans;
-        vector<int> subset;
-
-        dfs(0, target, candidates, subset, ans);
+        vector<int> curr;
+        backtrack(ans, curr, candidates, 0, target);
         return ans;
-    }
-
-private:
-    void dfs(int i, int target, const vector<int>& nums, vector<int>& subset, vector<vector<int>>& ans) {
-        if (i >= (int)nums.size() || target < 0) {
-            // base case
-            return;
-        }
-        if (target == 0) {
-            // valid subset
-            ans.push_back(subset);
-            return;
-        }
-
-        subset.push_back(nums[i]);
-        dfs(i, target-nums[i], nums, subset, ans);
-        subset.pop_back();
-        dfs(i+1, target, nums, subset, ans);
     }
 };
 
