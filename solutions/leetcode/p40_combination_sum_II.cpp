@@ -1,17 +1,18 @@
 class Solution {
 private:
-    void backtrack(vector<vector<int>>& ans, vector<int>& candidates, vector<int>& curr, int target, int i){
-        if(target==0){
+    void backtrack(vector<vector<int>>& ans, vector<int>& curr, vector<int>& cand, int i, int target){
+        if(target == 0){
             ans.push_back(curr);
             return;
         }
-        if(i==candidates.size() || target<0) return;
 
-        for(int j=i; j<candidates.size(); ++j){
-            if(j>i && candidates[j]==candidates[j-1]) continue;
-            curr.push_back(candidates[j]);
-            backtrack(ans, candidates, curr, target-candidates[j], j+1);
-            curr.pop_back();
+        for(int j=i; j<(int)cand.size(); ++j){
+            if(j>i && cand[j]==cand[j-1]) continue;
+            if(target-cand[j]>=0){
+                curr.push_back(cand[j]);
+                backtrack(ans, curr, cand, j+1, target-cand[j]);
+                curr.pop_back();
+            }
         }
     }
 
@@ -20,8 +21,7 @@ public:
         vector<vector<int>> ans;
         vector<int> curr;
         sort(candidates.begin(), candidates.end());
-        backtrack(ans, candidates, curr, target, 0);
-
+        backtrack(ans, curr, candidates, 0, target);
         return ans;
     }
 };
