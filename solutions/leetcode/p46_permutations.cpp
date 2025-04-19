@@ -1,28 +1,23 @@
 class Solution {
-public:
-    vector<vector<int>> permute(vector<int>& nums) {
-        // recursion and swap within input array to get permutations
-        // no need to build up / down a subset array as we are simply getting permutations
-        // not subsequences or subarrays
-        vector<vector<int>> ans;
-        helper(0, nums, ans);
-        return ans;
-    }
-
 private:
-    void helper(int i, vector<int>& nums, vector<vector<int>>& ans) {
-        if (i >= (int)nums.size()) {
-            // base case
+    void backtrack(vector<vector<int>>& ans, vector<int>& nums, int i){
+        if (i == (int)nums.size()){
             ans.push_back(nums);
             return;
         }
 
-        for (int j = i; j < (int)nums.size(); ++j) {
-            // swap and recur to get all permutations
+        for(int j=i; j<(int)nums.size(); ++j){
             swap(nums[i], nums[j]);
-            helper(i+1, nums, ans);
+            backtrack(ans, nums, i+1);
             swap(nums[i], nums[j]);
         }
+    }
+
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> ans;
+        backtrack(ans, nums, 0);
+        return ans;
     }
 };
 
