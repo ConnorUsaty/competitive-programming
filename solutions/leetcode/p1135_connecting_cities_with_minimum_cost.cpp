@@ -54,4 +54,4 @@ public:
 // as each node is popped from pq update all adj's and if better path found, push to pq
 // continue until all nodes connected
 
-// used customer comparator; custom cmp decides which element gets pushed down lower in queue (heap), therefore do a.second>b.second to push a lower (towards back of pq) if a has a greater w than b 
+// used custom comparator; custom comp decides which element gets pushed down lower in queue (heap), therefore do a.second>b.second to push a lower (towards back of pq) if a has a greater w than b 
