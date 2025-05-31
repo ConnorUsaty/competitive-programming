@@ -20,3 +20,5 @@ public:
 // or connecting two different sequences -> min(curr, dp[i-curr])
 
 // whenever we need to "connect" sequences or subarrays or check for a best answer at a certain index we should use a vector to store previously calculated results
+
+// since we are only ever connecting it to the previous subarray we could just use a variable to hold the length of it and get down to O(1) space
