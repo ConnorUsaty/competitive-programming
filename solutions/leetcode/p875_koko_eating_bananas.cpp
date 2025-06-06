@@ -1,28 +1,26 @@
-class Solution{
-private:
-    bool check(vector<int>& p, int h, int m){
-        long long hours_req = 0;
-        for(const int& n : p){
-            hours_req += (n/m) + (n%m?1:0);
-        }
-        return hours_req <= h;
-    }
-
+class Solution {
 public:
     int minEatingSpeed(vector<int>& piles, int h) {
-        int l=1, r=*max_element(piles.begin(), piles.end()), ans=INT_MAX;
+        int l=1, r=*max_element(piles.begin(), piles.end());
+
+        auto check = [&piles, &h](int m){
+            int hours=h;
+            for(int i=0; i<(int)piles.size(); ++i){
+                hours -= (piles[i]/m + (piles[i]%m ? 1 : 0));
+            }
+            return hours>=0;
+        };
 
         while(l<=r){
             int m = l+(r-l)/2;
 
-            if(check(piles, h, m)){
-                ans = min(ans, m);
+            if(check(m)){
                 r=m-1;
             } else {
                 l=m+1;
             }
         }
-        return ans;
+        return l;
     }
 };
 
