@@ -24,6 +24,7 @@ public:
         x = find(x);
         y = find(y);
 
+        if(x == y) return;
         if(size_[x]<size_[y]) swap(x,y);
         size_[x] += size_[y];
         parent_[y] = x;
