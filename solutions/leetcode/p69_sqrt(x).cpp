@@ -1,24 +1,22 @@
 class Solution {
 public:
     int mySqrt(int x) {
-        if(x == 0 || x == 1) return x;
-
-        int l=1, r=x;
+        int l=0, r=x;
         while(l<=r){
-            int m = l+(r-l)/2;
-            if(m == x/m){
+            long long m = l+(r-l*1LL)/2;
+            if(m*m > x){
+                r = m-1;
+            } else if (m*m < x) {
+                l = m+1;
+            }
+            else {
                 return m;
             }
-            else if(m < x/m){
-                l=m+1;
-            }
-            else{
-                r=m-1;
-            }
         }
-        return l-1;
+        return (l==0 ? l : l-1);
     }
 };
 
+// bin search to find first int n where n*n > x, then ans = n-1
 // can perform binary search on ans -> O(logn) time, O(1) space
 // always use while l<=r and use else on r to push r over l so that l is at intended index
