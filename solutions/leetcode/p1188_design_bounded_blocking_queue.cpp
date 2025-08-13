@@ -1,37 +1,39 @@
 class BoundedBlockingQueue {
 private:
-    int _cap;
-    queue<int> _q;
-    std::mutex _mtx;
-    std::condition_variable _cv;
+    size_t capacity_;
+    queue<int> q_{};
+    mutex mtx_{};
+    condition_variable cv_{};
 
 public:
-    BoundedBlockingQueue(int capacity) : _cap(capacity) {} ;
+    BoundedBlockingQueue(int capacity) : capacity_(capacity) {}
     
     void enqueue(int element) {
-        std::unique_lock<std::mutex> lock(_mtx);
-        while(_q.size()>=_cap){
-            _cv.wait(lock); // release mutex until notifed
+        unique_lock<mutex> lck(mtx_);
+        while(q_.size() == capacity_){
+            cv_.wait(lck);
         }
-        _q.push(element);
-        lock.unlock();
-        _cv.notify_one();
+
+        q_.push(element);
+        lck.unlock();
+        cv_.notify_one();
     }
     
     int dequeue() {
-        std::unique_lock<std::mutex> lock(_mtx);
-        while(_q.empty()){
-            _cv.wait(lock); // release mutex until notified
+        unique_lock<mutex> lck(mtx_);
+        while(q_.empty()){
+            cv_.wait(lck);
         }
-        int item = _q.front();
-        _q.pop();
-        lock.unlock();
-        _cv.notify_one();
-        return item;
+        int element = q_.front();
+        q_.pop();
+        lck.unlock();
+        cv_.notify_one();
+        return element;
     }
     
     int size() {
-        return _q.size();
+        scoped_lock lck(mtx_);
+        return q_.size();
     }
 };
 
