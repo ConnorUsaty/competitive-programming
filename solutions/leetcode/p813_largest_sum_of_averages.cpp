@@ -3,28 +3,34 @@ public:
     double largestSumOfAverages(vector<int>& nums, int k) {
         const int n = (int)nums.size();
 
-        vector<double> p_sum(n+1, 0.0);
-        for (int i=0; i<n; ++i) {
-            p_sum[i+1] = p_sum[i] + nums[i];
+        vector<int> p_sum(n+1, 0);
+        for(int i=1; i<=n; ++i) {
+            p_sum[i] = p_sum[i-1] + nums[i-1];
         }
-        
-        // dp[i][j] = max sum of averages for first i elements split into j groups
-        vector<vector<double>> dp(n+1, vector<double>(k+1, -1e9));
-        dp[0][0] = 0;
-        
-        for (int end=1; end<=n; ++end) {
-            for (int group=1; group<=min(end, k); ++group) {
-                for (int start=group-1; start<end; ++start) {
-                    double sum = p_sum[end] - p_sum[start];
-                    double avg = sum / (end - start);
-                    dp[end][group] = max(dp[end][group], dp[start][group-1] + avg);
+
+        vector<vector<double>> dp(n, vector<double>(k, 0.0));
+        for(int end=0; end<n; ++end) {
+            for(int partition=0; partition<=min(end,k-1); ++partition) {
+                int min_start = (partition == 0) ? 0 : partition;
+                for(int start=end; start>=min_start; --start) {
+                    if(partition == 0 && start > 0) continue;
+                    double part_score = (p_sum[end+1] - p_sum[start]) / (end-start+1.0);
+                    double prev_score = (start>0 && partition>0 ? dp[start-1][partition-1] : 0);
+                    dp[end][partition] = max(dp[end][partition], prev_score + part_score);
                 }
             }
         }
-        
-        return dp[n][k];
+        return dp[n-1][k-1]; 
     }
 };
 
-// for parition problems we have to check each possible parition point resulting in 3 nested loops for group, start, end
-// can use prefix sum to efficiently calculates range sums / avg
+// NEED to loop like this: end, part, start
+// to properly build up dp[end][part]
+
+// we can make p_sum to get sums in O(1)
+// we will need to try every parition -> O(n^2 * k)
+// dp[end][k] = score after ending parition k on [end]
+
+// parition array into AT MOST k subarrays
+// score of each parition = sum(avg of paritions)
+// return max score acheivable
