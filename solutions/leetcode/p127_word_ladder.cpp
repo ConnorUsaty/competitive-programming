@@ -2,45 +2,42 @@ class Solution {
 public:
     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
         unordered_map<string,vector<string>> adj;
-        for(const string& word : wordList){
-            for(int i=0; i<word.length(); ++i){
-                string temp = word;
-                temp[i] = '*';
-                adj[temp].push_back(word);
+        for(auto& word : wordList) {
+            for(int i=0; i<word.size(); ++i) {
+                string key = word;
+                key[i] = '#';
+                adj[key].push_back(word); 
             }
         }
 
-        queue<string> Q;
+        queue<string> q;
         unordered_set<string> visited;
-        Q.push(beginWord);
+        q.push(beginWord);
         visited.insert(beginWord);
+        int steps = 1;
 
-        int ans = 1;
-        while(Q.size() > 0){
-            int s = Q.size();
-            for(int i=0; i<s; ++i){
-                string u = Q.front();
-                Q.pop();
-                if(u == endWord) return ans;
-                for(int j=0; j<u.length(); ++j){
-                    string temp = u;
-                    temp[j] = '*';
-                    for(const string& word : adj[temp]){
-                        if(visited.find(word) == visited.end()){
-                            Q.push(word);
-                            visited.insert(word);
+        while(!q.empty()) {
+            int s = q.size();
+            for(int i=0; i<s; ++i) {
+                string u = q.front();
+                q.pop();
+
+                if(u == endWord) return steps;
+
+                for(int i=0; i<u.size(); ++i) {
+                    string key = u;
+                    key[i] = '#';
+                    for(const string & v : adj[key]) {
+                        if(visited.find(v) == visited.end()) {
+                            q.push(v);
+                            visited.insert(v);
                         }
                     }
                 }
             }
-            ans++;
+            steps++;
         }
-        return 0; // not found
+
+        return 0;
     }
 };
-
-// shortest unweighted path problem -> BFS
-
-// can create a graph or adj list by making a key that would match all valid transformations and then pushing each to that key
-// during BFS pop front, check if endWord, if not visit all adj words, and push them to Q if they have not been visited
-// important to mark as visited at the same time we push to prevent duplicate pushes
