@@ -1,37 +1,54 @@
-class LRUCache{
-    int m_capacity;
-    unordered_map<int, list<pair<int, int>>::iterator> m_map; //m_map_iter->first: key, m_map_iter->second: list iterator;
-    list<pair<int, int>> m_list;                               //m_list_iter->first: key, m_list_iter->second: value;
-    // list is a doubly linked list (pointers at front and back)
+using pii = pair<int,int>;
+
+class LRUCache {
+private:
+    std::list<pii> list_{}; // {key, val}
+    std::unordered_map<int, std::list<pii>::iterator> mp_{}; // {key, LL iter}
+    size_t cap_;
+
 public:
-    LRUCache(size_t capacity):m_capacity(capacity) {}
-
+    LRUCache(int capacity) : cap_(capacity) {}
+    
     int get(int key) {
-        auto found_iter = m_map.find(key);
-        if (found_iter == m_map.end()) //key doesn't exist
+        auto it = mp_.find(key);
+        if(it == mp_.end()) {
             return -1;
-        m_list.splice(m_list.begin(), m_list, found_iter->second); //move the node corresponding to key to front
-        return found_iter->second->second;                         //return value of the node
-    }
+        }
 
+        // key exists, we must update this to be the most recently accessed
+        list_.splice(list_.end(), list_, it->second);
+        return it->second->second;
+    }
+    
     void put(int key, int value) {
-        auto found_iter = m_map.find(key);
-        if (found_iter != m_map.end()) //key exists
-        {
-            m_list.splice(m_list.begin(), m_list, found_iter->second); //move the node corresponding to key to front
-            found_iter->second->second = value;                        //update value of the node
-            return;
+        auto it = mp_.find(key);
+        if(it == mp_.end()) {
+            if(mp_.size() == cap_) {
+                // remove LRU element
+                auto lru_it = list_.begin();
+                mp_.erase(lru_it->first);
+                list_.pop_front();
+            }
+            // insert new element
+            list_.push_back({key, value});
         }
-        if (m_map.size() == m_capacity) //reached capacity
-        {
-           int key_to_del = m_list.back().first; 
-           m_list.pop_back();            //remove node in list;
-           m_map.erase(key_to_del);      //remove key in map
+        else {
+            // update val of existing
+            list_.splice(list_.end(), list_, it->second);
+            list_.back().second = value;
         }
-        m_list.emplace_front(key, value);  //create new node in list
-        m_map[key] = m_list.begin();       //create correspondence between key and node
+        auto back_it = std::prev(list_.end());
+        mp_[key] = back_it;
     }
 };
 
+// check for existance, add, or update val in amoritzed O(1) with unordered_map
+// to evict from LRU in O(1) we can maintain a LL that is in order of usage
+// must store iterator to LL in map to move around in O(1)
 
-// list<T> is doubly linked list from STL
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
