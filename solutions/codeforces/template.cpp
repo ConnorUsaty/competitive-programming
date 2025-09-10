@@ -1,18 +1,15 @@
 #include <bits/stdc++.h> 
 
-typedef long long ll;
-typedef std::pair<int,int> pii;
+using ll = long long;
+using pii = std::pair<int,int>;
 
 using namespace std; 
 
 
 void solve() {
 
-
-
-    return;
+    
 }
-
 
 int main() { 
     ios::sync_with_stdio(0); 
